@@ -16,7 +16,6 @@ namespace Chal
 			if (_isFull)
 				return false;
 
-			_container.Set(_container.Head(), item);
             _buffer[_head] = item;
 
             _head += 1;
@@ -64,7 +63,7 @@ namespace Chal
 			if (_isFull)
 				return false;
 	
-			if (_head != tail)
+			if (_head != _tail)
 				return false;
 
 			return true;
@@ -82,7 +81,7 @@ namespace Chal
 			if (_isFull)
 				return SIZE;
 
-            if(_head >= tail)
+            if(_head >= _tail)
                 return _head - _tail;
             else
                 return SIZE + _head - _tail;

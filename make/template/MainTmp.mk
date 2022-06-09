@@ -4,27 +4,30 @@
 # ------------------------------------------------
 
 # target
-target = libChal
+target = 
 
 # Directories
 project_dir := .
 make_dir := $(project_dir)/make
 
 # External libraries
-external_names := \
-CppUTest
+external_names = \
 
-external_lib_names := \
+external_lib_names = \
 
-external_lib_dirs := \
+external_lib_dirs = \
+
+# Project libraries
+library_names = \
 
 # Sources 
-cxx_sources :=  \
-$(wildcard $(target)/*.cpp) \
+cxx_sources =  \
 
 # Includes
-cxx_includes :=  \
--I.
+cxx_includes =  \
+
+# Linker script
+ldscript = 
 
 # Append rest of Makefile from template
-include $(make_dir)/MainLib.mk
+include $(make_dir)/Main.mk

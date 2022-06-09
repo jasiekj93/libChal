@@ -6,14 +6,9 @@
  * @details
  */
 
-#include "Led.test.hpp"
-
-using namespace Driver::Test;
+#include <CppUTest/CommandLineTestRunner.h>
 
 int main(int argc, char *argv[])
 {    
-    while(true)
-    {
-        Led();        
-    }
+    return CommandLineTestRunner::RunAllTests(argc, argv);
 }

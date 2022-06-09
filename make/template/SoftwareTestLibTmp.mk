@@ -4,16 +4,15 @@
 # ------------------------------------------------
 
 # Target
-target := testChal
+target := 
 
 # Directories
-project_dir ?= ..
+project_dir ?= ../..
 make_dir := $(project_dir)/make
 external_dir := $(project_dir)/external
 
 # Sources 
 cxx_sources :=  \
-$(wildcard *.cpp)
 
 # Includes
 cxx_includes := \
@@ -23,10 +22,8 @@ cxx_defs := \
 
 # Libraries
 library_includes = \
--I..
 
 library_flags = \
--lChalPc32
 
 external_library_flags = \
 
