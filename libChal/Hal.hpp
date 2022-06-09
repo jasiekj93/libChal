@@ -12,7 +12,23 @@
 
 namespace Chal
 {
-    static constexpr size_t ReceiveBufferSize = 256;
+    class IStream
+    {
+    public:
+        virtual ~IStream() {}
+
+        virtual bool Init() = 0;
+        virtual bool DeInit() = 0;
+        virtual bool IsInitalized() = 0;
+
+        virtual bool Read(unsigned char *out, size_t size) = 0;
+        virtual size_t GetReadCount() const = 0;
+
+        //Set EoF if Read method returned false;
+        virtual bool IsEndOfFile() const = 0; 
+        virtual bool IsError() const = 0;
+        virtual void ClearErrors() = 0;
+    };
 
     class IHal
     {
@@ -22,15 +38,8 @@ namespace Chal
         virtual clock_t GetClock() = 0;
         virtual time_t GetTime() = 0;
 
-        virtual void Transmit(unsigned char *, size_t) = 0;
-
-        virtual void DisableInterrupts() = 0;
-        virtual void EnableInterrupts() = 0;
+        virtual IStream * GetStream(const char *) = 0;
     };
-
-    void ReceiveCallback(const unsigned char *, size_t);
-    size_t ReadReceivedData(unsigned char *, size_t max);
-    size_t ReadString(unsigned char *, size_t max);
 
     void SetHal(IHal *);
     IHal * GetHal();
