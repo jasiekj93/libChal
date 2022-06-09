@@ -13,10 +13,20 @@
 
 namespace Mock
 {
-    class Stream : public Chal::IStream
+    class Stream : public Chal::SerialStream
     {
     public: 
-        bool Init() override 
+        Stream(size_t size) : Chal::SerialStream(size)
+        {
+            WriteBuffer = new unsigned char[size];
+        }
+
+        ~Stream()
+        {
+            delete[] WriteBuffer;
+        }
+
+        bool Open() override 
         { 
             if(Result == false)
                 return false;
@@ -24,7 +34,7 @@ namespace Mock
             InitalizeStatus = true;
             return true;
         }
-        bool DeInit() override 
+        bool Close() override 
         {
             if(Result == false)
                 return false;
@@ -33,32 +43,22 @@ namespace Mock
             return true;
         }
 
-        bool IsInitalized() override { return InitalizeStatus; }
-
-        bool Read(unsigned char *out, size_t size) override
+        bool Write(const unsigned char *data, size_t size) override
         {
-            if(ReadResult == false)
+            if(Result == false)
                 return false;
 
-            if(size > sizeof(Buffer))
+            if(size > _buffer.Size)
                 return false;
 
-            memcpy(out, Buffer, size);    
+            memcpy(WriteBuffer, data, size);
             return true;
-        } 
+        }
 
-        size_t GetReadCount() const { return ReadCount; }
-
-        bool IsEndOfFile() const override { return EndOfFile; }
-        bool IsError() const override { return Error; }
-        void ClearErrors() override { EndOfFile = Error = false; }
-
+        auto & GetBuffer() { return _buffer; }
+        
         bool Result = true;
         bool InitalizeStatus = false;
-        bool Error = false;
-        bool EndOfFile = false;
-        bool ReadResult = true;
-        unsigned char Buffer[1024];
-        size_t ReadCount = 0;
+        unsigned char *WriteBuffer;
     };
 }

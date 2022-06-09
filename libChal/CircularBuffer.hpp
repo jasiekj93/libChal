@@ -11,30 +11,34 @@
 
 namespace Chal
 {
-	template<typename T, size_t SIZE>
+	template<typename T>
 		class CircularBuffer
 		{
 		public:
-			CircularBuffer();
+			CircularBuffer(size_t);
+			~CircularBuffer();
 
-			bool Put(const T &);
+			void Put(const T &);
+            void Put(const T *, size_t);
 			T Get();
+            void Get(T *, size_t);
 			void Clear();
 
-			bool IsFull() const;
 			bool IsEmpty() const;
 			bool IsNotEmpty() const;
+			bool IsFull() const;
 			size_t Count() const;
-			size_t Size() const;
 
 			T operator[](size_t) const;
-			T At(size_t i) const;
-			
+			T At(size_t) const;
+
+            const size_t Size;
+
 		private:
-			T _buffer[SIZE];
+			T *_buffer;
             size_t _head;
             size_t _tail;
-            bool _isFull;
+            size_t _count;
 		};
 }
 

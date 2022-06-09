@@ -18,10 +18,10 @@ namespace Mock
         clock_t GetClock() override { return Clock; }
         time_t GetTime() override { return Time; }
 
-        Chal::IStream * GetStream(const char *) override { return Stream; } 
+        Chal::Stream * GetStream(const char *) override { return Stream; } 
     
         static clock_t Clock;
         static time_t Time;
-        static Chal::IStream *Stream;
+        static Chal::Stream *Stream;
     };
 }

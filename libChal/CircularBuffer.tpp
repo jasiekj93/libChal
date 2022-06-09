@@ -2,111 +2,108 @@
 
 namespace Chal
 {
-	template<typename T, size_t SIZE>
-		inline CircularBuffer<T, SIZE>::CircularBuffer()
+	template<typename T>
+		inline CircularBuffer<T>::CircularBuffer(size_t size)
 			: _head(0)
             , _tail(0) 
-            , _isFull(false)
+            , _count(0)
+            , Size(size)
+            , _buffer(new T[size])
 		{
 		}
 
-	template<typename T, size_t SIZE>
-		inline bool CircularBuffer<T, SIZE>::Put(const T &item)
+    template<typename T>
+		inline CircularBuffer<T>::~CircularBuffer()
 		{
-			if (_isFull)
-				return false;
+            delete[] _buffer;
+		}
 
+	template<typename T>
+		inline void CircularBuffer<T>::Put(const T &item)
+		{
             _buffer[_head] = item;
 
             _head += 1;
-            _head %= SIZE;
+            _head %= Size;
 
-            if(_head == _tail)
-                _isFull = true;
-
-			return true;
+            if(_count < Size)
+                _count++;
 		}
 
-	template<typename T, size_t SIZE>
-		inline T CircularBuffer<T, SIZE>::Get()
+    template<typename T>
+		inline void CircularBuffer<T>::Put(const T *array, size_t size)
 		{
-			if (IsEmpty())
+           for(auto i = 0; i < size; i++)
+                Put(array[i]);
+		}
+
+	template<typename T>
+		inline T CircularBuffer<T>::Get()
+		{
+			if (_count == 0)
 				return T();
 
             T result = _buffer[_tail];
 
             _tail += 1;
-            _tail %= SIZE;
-
-            if(_isFull)
-                _isFull = false;
+            _tail %= Size;
+            _count--;
 
 			return result;
 		}
+    
+    template<typename T>
+		inline void CircularBuffer<T>::Get(T *array, size_t size)
+		{
+            for(auto i = 0; i < size; i++)
+                array[i] = Get();
+		}
 
-	template<typename T, size_t SIZE>
-		inline void CircularBuffer<T, SIZE>::Clear()
+	template<typename T>
+		inline void CircularBuffer<T>::Clear()
 		{
             _head = _tail;
-			_isFull = false;
+			_count = 0;
 		}
 
-	template<typename T, size_t SIZE>
-		inline bool CircularBuffer<T, SIZE>::IsFull() const
+	template<typename T>
+		inline bool CircularBuffer<T>::IsFull() const
 		{
-			return _isFull;
+			return (_count == Size);
 		}
 
-	template<typename T, size_t SIZE>
-		inline bool CircularBuffer<T, SIZE>::IsEmpty() const
+	template<typename T>
+		inline bool CircularBuffer<T>::IsEmpty() const
 		{
-			if (_isFull)
-				return false;
-	
-			if (_head != _tail)
-				return false;
-
-			return true;
+            return (_count == 0);
 		}
 
-	template<typename T, size_t SIZE>
-		inline bool CircularBuffer<T, SIZE>::IsNotEmpty() const
+	template<typename T>
+		inline bool CircularBuffer<T>::IsNotEmpty() const
 		{
-			return (IsEmpty() == false);
+			return (_count > 0);
 		}
 
-	template<typename T, size_t SIZE>
-		inline size_t CircularBuffer<T, SIZE>::Count() const
+	template<typename T>
+		inline size_t CircularBuffer<T>::Count() const
 		{
-			if (_isFull)
-				return SIZE;
-
-            if(_head >= _tail)
-                return _head - _tail;
-            else
-                return SIZE + _head - _tail;
+            return _count;
 		}
 
-	template<typename T, size_t SIZE>
-		inline size_t CircularBuffer<T, SIZE>::Size() const
+	template<typename T>
+		inline T CircularBuffer<T>::At(size_t index) const
 		{
-			return SIZE;
-		}
-
-	template<typename T, size_t SIZE>
-		inline T CircularBuffer<T, SIZE>::At(size_t index) const
-		{
-			if (index >= Count())
+			if (index >= _count)
 				return T();
 
 			index += _tail;
-            index %= SIZE;
+            index %= Size;
 
 			return _buffer[index];
 		}
 
-	template<typename T, size_t SIZE>
-		inline T CircularBuffer<T, SIZE>::operator[](size_t index) const
+	template<typename T>
+		inline T CircularBuffer<T>::operator[](size_t index) const
 		{
 			return At(index);
 		}

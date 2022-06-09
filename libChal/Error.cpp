@@ -14,7 +14,7 @@ int ferror(FILE *stream)
     if(stream == nullptr)
         return 0;
     
-    auto result = ((Chal::IStream *)stream)->IsError();
+    auto result = ((Chal::Stream *)stream)->Error();
 
     return (result ? 1 : 0);
 }
@@ -24,7 +24,7 @@ int feof (FILE * stream)
     if(stream == nullptr)
         return 0;
     
-    auto result = ((Chal::IStream *)stream)->IsEndOfFile();
+    auto result = ((Chal::Stream *)stream)->EndOfFile();
 
     return (result ? 1 : 0);
 }
@@ -34,5 +34,5 @@ void clearerr (FILE * stream)
     if(stream == nullptr)
         return;
 
-    ((Chal::IStream *)stream)->ClearErrors();
+    ((Chal::Stream *)stream)->ClearErrors();
 }

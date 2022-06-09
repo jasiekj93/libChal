@@ -19,7 +19,7 @@ TEST_GROUP(FileTest)
     void setup()
     {
         hal = new Mock::Hal();
-        stream = new Mock::Stream();
+        stream = new Mock::Stream(128);
         Chal::SetHal(hal);
         Mock::Hal::Stream = stream;
     }
@@ -73,11 +73,27 @@ TEST(FileTest, Freopen)
 TEST(FileTest, Fread)
 {
     size_t count = 10;
+    char data[128];
     char buffer[128];
-    stream->ReadCount = count;
+    memset(data, 5, count);
+    stream->GetBuffer().Put((unsigned char *)data, count);
 
     auto file = fopen("", "");
     auto result = fread(buffer, sizeof(char), count, file);
 
     CHECK_EQUAL(count, result); 
+    MEMCMP_EQUAL(data, buffer, count);
+}
+
+TEST(FileTest, Fwrite)
+{
+    size_t count = 10;
+    char data[128];
+    memset(data, 5, count);
+
+    auto file = fopen("", "");
+    auto result = fwrite(data, sizeof(char), count, file);
+
+    CHECK_EQUAL(count, result); 
+    MEMCMP_EQUAL(data, stream->WriteBuffer, count);
 }

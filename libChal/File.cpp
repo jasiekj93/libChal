@@ -11,7 +11,7 @@
 
 FILE * fopen(const char *filename, const char *mode)
 {
-    Chal::IStream *stream = nullptr;
+    Chal::Stream *stream = nullptr;
     auto result = false;
     auto hal = Chal::GetHal();
 
@@ -20,7 +20,7 @@ FILE * fopen(const char *filename, const char *mode)
         stream = hal->GetStream(filename);
 
         if(stream != nullptr)
-            result = stream->Init();
+            result = stream->Open();
     }
 
     if(result == false)
@@ -34,9 +34,9 @@ int fclose(FILE * stream)
     if(stream == nullptr)
         return EOF;
 
-    auto pointer = (Chal::IStream *)stream;
+    auto pointer = (Chal::Stream *)stream;
 
-    if(pointer->DeInit() == true)
+    if(pointer->Close() == true)
         return 0;
     else
         return EOF;
@@ -69,13 +69,19 @@ size_t fread(void *out, size_t size, size_t count, FILE *pointer)
     if(pointer == nullptr || out == nullptr)
         return 0;
 
-    auto stream = (Chal::IStream *)pointer;
+    auto stream = (Chal::Stream *)pointer;
     auto result = stream->Read((unsigned char *)out, size * count);
 
     return (result ? count : 0);
 }
 
-size_t fwrite(const void *ptr, size_t size, size_t count, FILE *stream)
+size_t fwrite(const void *data, size_t size, size_t count, FILE *pointer)
 {
-    return 0;
+    if(pointer == nullptr || data == nullptr)
+        return 0;
+
+    auto stream = (Chal::Stream *)pointer;
+    auto result = stream->Write((const unsigned char *)data, size * count);
+
+    return (result ? count : 0);
 }
