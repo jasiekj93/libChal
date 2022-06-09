@@ -22,6 +22,9 @@ namespace Chal
         virtual time_t GetTime() = 0;
 
         virtual Stream * GetStream(const char *) = 0;
+        virtual Stream * GetStdin() = 0;
+        virtual Stream * GetStout() = 0;
+        virtual Stream * GetStderr() = 0;
     };
 
     void SetHal(IHal *);

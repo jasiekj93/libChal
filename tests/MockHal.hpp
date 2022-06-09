@@ -19,6 +19,9 @@ namespace Mock
         time_t GetTime() override { return Time; }
 
         Chal::Stream * GetStream(const char *) override { return Stream; } 
+        Chal::Stream * GetStdin() override { return Stream; } 
+        Chal::Stream * GetStout() override { return Stream; } 
+        Chal::Stream * GetStderr() override { return Stream; } 
     
         static clock_t Clock;
         static time_t Time;
