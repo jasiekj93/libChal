@@ -10,9 +10,6 @@
 
 #include <time.h>
 
-//TODO
-// typedef  FILE;
-
 namespace Chal
 {
     static constexpr size_t ReceiveBufferSize = 256;

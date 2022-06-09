@@ -12,14 +12,29 @@
 extern "C" {
 #endif
 
-clock_t clock (void)
+clock_t clock()
 {
-    return Chal::GetHal()->GetClock();
+    auto hal = Chal::GetHal();
+
+    if(hal != nullptr)
+        return hal->GetClock();
+    else
+        return -1;
 }
 
-time_t time (time_t* timer)
+time_t time(time_t* timer)
 {
-    return Chal::GetHal()->GetTime();
+    auto hal = Chal::GetHal();
+    
+    time_t result = -1;
+
+    if(hal != nullptr)
+        result = hal->GetTime();
+
+    if(timer != nullptr)
+        *timer = result;
+
+    return result;
 }
 
 #ifdef __cplusplus
