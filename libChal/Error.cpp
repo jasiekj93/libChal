@@ -40,8 +40,15 @@ void Chal::clearerr(FILE * stream)
 
 void Chal::perror(const char *message)
 {
-    if(Stderr == nullptr)
+    auto hal = Chal::GetHal();
+
+    if(hal == nullptr)
         return;
 
-    Stderr->Write((const unsigned char *)message, strlen(message));
+    auto stream = hal->GetStderr();
+
+    if(stream == nullptr)
+        return;
+
+    stream->Write((const unsigned char *)message, strlen(message));
 }

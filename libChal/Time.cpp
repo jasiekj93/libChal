@@ -44,11 +44,30 @@ time_t Chal::mktime(struct tm *time)
     return ::mktime(time);
 }
 
-char * asctime(const struct tm *);
-char * ctime(const time_t *);
-struct tm * gmtime(const time_t *);
-struct tm * localtime(const time_t *);
-size_t strftime(char *, size_t, const char *, const struct tm *);
+char * Chal::asctime(const struct tm *time)
+{
+    return ::asctime(time);
+}
+
+char * Chal::ctime(const time_t *time)
+{
+    return ::ctime(time);
+}
+
+struct tm * Chal::gmtime(const time_t *time)
+{
+    return ::gmtime(time);
+}
+
+struct tm * Chal::localtime(const time_t *time)
+{
+    return ::localtime(time);
+}
+
+size_t Chal::strftime(char *buffer, size_t max, const char *format, const struct tm *time)
+{
+    return ::strftime(buffer, max, format, time);
+}
 
 
 

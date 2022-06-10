@@ -6,7 +6,7 @@
  * @details
  */
 
-#include <stdio.h>
+#include <libChal/Stdio.hpp>
 #include "MockHal.hpp"
 #include "MockStream.hpp"
 #include <CppUTest/CommandLineTestRunner.h>
@@ -33,44 +33,44 @@ TEST_GROUP(FileTest)
     }
 };
 
-TEST(FileTest, Fopen)
+TEST(FileTest, Fopen_Function)
 {
-    auto file = fopen("name", "not important");
+    auto file = Chal::fopen("name", "not important");
     CHECK((Mock::Stream *)file == stream);
     CHECK(stream->InitalizeStatus);
 
     Mock::Hal::Stream = nullptr;
-    file = fopen("a", "");
+    file = Chal::fopen("a", "");
     CHECK(file == nullptr);
 
     Chal::SetHal(nullptr);
     Mock::Hal::Stream = stream;
-    file = fopen("b", "");
+    file = Chal::fopen("b", "");
     CHECK(file == nullptr);
 }
 
-TEST(FileTest, Fclose)
+TEST(FileTest, Fclose_Function)
 {
-    auto file = fopen("name", "not important");
+    auto file = Chal::fopen("name", "not important");
     CHECK(stream->InitalizeStatus);
 
-    auto result = fclose(nullptr);
+    auto result = Chal::fclose(nullptr);
     CHECK(EOF == result);
 
-    result = fclose(file);
+    result = Chal::fclose(file);
     CHECK_EQUAL(0, result);
     CHECK_FALSE(stream->InitalizeStatus);
 }
 
-TEST(FileTest, Freopen)
+TEST(FileTest, Freopen_Function)
 {
-    auto file = fopen("name", "not important");
-    auto secondFile = freopen("a", "", file);
+    auto file = Chal::fopen("name", "not important");
+    auto secondFile = Chal::freopen("a", "", file);
 
     CHECK(file == secondFile);
 }
 
-TEST(FileTest, Fread)
+TEST(FileTest, Fread_Function)
 {
     size_t count = 10;
     char data[128];
@@ -78,32 +78,32 @@ TEST(FileTest, Fread)
     memset(data, 5, count);
     stream->Append((unsigned char *)data, count);
 
-    auto file = fopen("", "");
-    auto result = fread(buffer, sizeof(char), count, file);
+    auto file = Chal::fopen("", "");
+    auto result = Chal::fread(buffer, sizeof(char), count, file);
 
     CHECK_EQUAL(count, result); 
     MEMCMP_EQUAL(data, buffer, count);
 }
 
-TEST(FileTest, Fwrite)
+TEST(FileTest, Fwrite_Function)
 {
     size_t count = 10;
     char data[128];
     memset(data, 5, count);
 
-    auto file = fopen("", "");
-    auto result = fwrite(data, sizeof(char), count, file);
+    auto file = Chal::fopen("", "");
+    auto result = Chal::fwrite(data, sizeof(char), count, file);
 
     CHECK_EQUAL(count, result); 
     MEMCMP_EQUAL(data, stream->WriteBuffer, count);
 }
 
-TEST(FileTest, Setbuf)
+TEST(FileTest, Setbuf_Function)
 {
     char buffer[BUFSIZ];
 
-    auto file = fopen("", "");
-    setbuf(file, buffer);
+    auto file = Chal::fopen("", "");
+    Chal::setbuf(file, buffer);
 
     CHECK_EQUAL(buffer, stream->Buffer()); 
 }

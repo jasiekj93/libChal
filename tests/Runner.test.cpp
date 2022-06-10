@@ -11,6 +11,5 @@
 
 int main(int argc, char *argv[])
 {
-    Chal::SetHal(nullptr);
     return CommandLineTestRunner::RunAllTests(argc, argv);
 }

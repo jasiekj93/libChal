@@ -6,7 +6,7 @@
  * @details
  */
 
-#include <stdio.h>
+#include <libChal/Stdio.hpp>
 #include "MockHal.hpp"
 #include "MockStream.hpp"
 #include <CppUTest/CommandLineTestRunner.h>
@@ -33,32 +33,32 @@ TEST_GROUP(FormattedTest)
     }
 };
 
-TEST(FormattedTest, Fprintf)
+TEST(FormattedTest, Fprintf_Function)
 {
     const char expected[] = "My Dog is 5 years old."; 
     const char format[] = "My %s is %d years old.";
     int number = 5;
     const char dog[] = "Dog";
 
-    auto file = fopen("", "");
-    auto result = fprintf(file, format, dog, number);
+    auto file = Chal::fopen("", "");
+    auto result = Chal::fprintf(file, format, dog, number);
 
     STRCMP_EQUAL(expected, (char *)stream->WriteBuffer);
 }
 
-TEST(FormattedTest, Printf)
+TEST(FormattedTest, Printf_Function)
 {
     const char expected[] = "My Dog is 5 years old."; 
     const char format[] = "My %s is %d years old.";
     int number = 5;
     const char dog[] = "Dog";
 
-    auto result = printf(format, dog, number);
+    auto result = Chal::printf(format, dog, number);
 
     STRCMP_EQUAL(expected, (char *)stream->WriteBuffer);
 }
 
-TEST(FormattedTest, Fscanf)
+TEST(FormattedTest, Fscanf_Function)
 {
     int expectedNumber = 5;
     const char *expectedString = "Dog";
@@ -68,15 +68,15 @@ TEST(FormattedTest, Fscanf)
     const char format[] = "My %s is %d years old.";
     stream->Append((unsigned char *)text, strlen(text));
 
-    auto file = fopen("", "");
-    auto result = fscanf(file, format, buffer, &number);
+    auto file = Chal::fopen("", "");
+    auto result = Chal::fscanf(file, format, buffer, &number);
 
     CHECK_EQUAL(2, result);
     CHECK_EQUAL(expectedNumber, number);
     MEMCMP_EQUAL(expectedString, buffer, strlen(expectedString));
 }
 
-TEST(FormattedTest, Scanf)
+TEST(FormattedTest, Scanf_Function)
 {
     int expectedNumber = 5;
     const char *expectedString = "Dog";
@@ -86,7 +86,7 @@ TEST(FormattedTest, Scanf)
     const char format[] = "My %s is %d years old.";
     stream->Append((unsigned char *)text, strlen(text));
 
-    auto result = scanf(format, buffer, &number);
+    auto result = Chal::scanf(format, buffer, &number);
 
     CHECK_EQUAL(2, result);
     CHECK_EQUAL(expectedNumber, number);

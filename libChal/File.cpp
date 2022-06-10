@@ -6,7 +6,7 @@
  * @details
  */
 #include "Stdio.hpp"
-#include "Errno.hpp"
+#include <errno.h> 
 #include "Hal.hpp"
 
 Chal::FILE * Chal::fopen(const char *filename, const char *mode)

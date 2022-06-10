@@ -31,10 +31,24 @@ namespace Chal
     int setvbuf(FILE *, char *, int, size_t );
     size_t fread(void *, size_t, size_t, FILE *);
     size_t fwrite(const void *, size_t, size_t, FILE *);
-    int snprintf ( char * s, size_t n, const char * format, ...);
-    int sprintf ( char * str, const char * format, ...);
-    int sscanf ( const char * s, const char * format, ...);
-    int vsnprintf (char * s, size_t n, const char * format, va_list arg);
-    int vsprintf (char * s, const char * format, va_list arg);
-    int vsscanf ( const char * s, const char * format, va_list arg);
+
+    //Formatted
+    int vfprintf(FILE *pointer, const char *format, va_list args);
+    int fprintf(FILE *pointer, const char *format, ...);
+    int vprintf(const char *format, va_list args);
+    int printf(const char *format, ...);
+    int vfscanf(FILE *pointer, const char *format, va_list args);
+    int fscanf(FILE *pointer, const char *format, ...);
+    int vscanf(const char *format, va_list args);
+    int scanf(const char *format, ...);
+    int snprintf( char * s, size_t n, const char * format, ...);
+    int sprintf( char * str, const char * format, ...);
+    int sscanf( const char * s, const char * format, ...);
+    int vsnprintf(char * s, size_t n, const char * format, va_list arg);
+    int vsprintf(char * s, const char * format, va_list arg);
+    int vsscanf( const char * s, const char * format, va_list arg);
+
+    //Character
+    int putc(int, FILE *);
+    int putchar(int);
 }

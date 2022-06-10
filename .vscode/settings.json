@@ -4,6 +4,7 @@
         "*.roff": "troff",
         "time.h": "c",
         "cstdio": "cpp",
-        "cerrno": "cpp"
+        "cerrno": "cpp",
+        "ctime": "cpp"
     }
 }

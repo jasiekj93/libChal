@@ -1,9 +1,8 @@
 
-#include <stdio.h>
-#include <cstdio>
+#include "Stdio.hpp"
 #include "Hal.hpp"
 
-int putc(int character, FILE *pointer)
+int Chal::putc(int character, FILE *pointer)
 {
     if(pointer == nullptr)
         return EOF;
@@ -14,7 +13,7 @@ int putc(int character, FILE *pointer)
     return (result ? character : EOF);
 }
 
-int putchar(int character)
+int Chal::putchar(int character)
 {
     auto hal = Chal::GetHal();
 
@@ -22,6 +21,5 @@ int putchar(int character)
         return EOF;
 
     auto stream = hal->GetStout();
-    // return putc(character, (FILE *)stream);
-    return putc(character, stdout);
+    return Chal::putc(character, stream);
 }
