@@ -47,7 +47,7 @@ int vprintf(const char *format, va_list args)
         return -1;
 
     auto stream = hal->GetStout();
-    if(stdout == nullptr)
+    if(stream == nullptr)
         return -1;
 
     auto result = vfprintf((FILE *)stream, format, args);
@@ -66,8 +66,52 @@ int printf(const char *format, ...)
     return result;
 }
 
-int vfscanf(FILE *stream, const char *format, va_list args)
+int vfscanf(FILE *pointer, const char *format, va_list args)
 {
-    return -1;
-    //TODO
+    if(pointer == nullptr)
+        return EOF;
+
+    auto stream = (Chal::Stream *)pointer;
+    auto size = stream->ReadUpTo((unsigned char *)buffer, bufferSize -1);
+    buffer[size] = '\0';
+
+    auto result = vsscanf(buffer, format, args);
+    return result;
+}
+
+int fscanf(FILE *pointer, const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    
+    auto result = vfscanf(pointer, format, args);
+    va_end(args);
+
+    return result;
+}
+
+int vscanf(const char *format, va_list args)
+{
+    auto hal = Chal::GetHal();
+    if(hal == nullptr)
+        return -1;
+
+    auto stream = hal->GetStdin();
+    if(stream == nullptr)
+        return -1;
+
+    auto result = vfscanf((FILE *)stream, format, args);
+
+    return result;
+}
+
+int scanf(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    
+    auto result = vscanf(format, args);
+    va_end(args);
+
+    return result;
 }

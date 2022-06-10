@@ -43,20 +43,23 @@ namespace Mock
             return true;
         }
 
-        bool Write(const unsigned char *data, size_t size) override
+        bool _Write(const unsigned char *data, size_t size) override
         {
             if(Result == false)
                 return false;
 
-            if(size > _buffer.Size)
+            if(size > Buffer().Size)
                 return false;
 
             memcpy(WriteBuffer, data, size);
             return true;
         }
 
-        auto & GetBuffer() { return _buffer; }
-        
+        void Append(const unsigned char *data, size_t size)
+        {
+            _ReceivedDataCallback(data, size);
+        }
+
         bool Result = true;
         bool InitalizeStatus = false;
         unsigned char *WriteBuffer;

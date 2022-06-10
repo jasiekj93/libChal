@@ -76,7 +76,7 @@ TEST(FileTest, Fread)
     char data[128];
     char buffer[128];
     memset(data, 5, count);
-    stream->GetBuffer().Put((unsigned char *)data, count);
+    stream->Append((unsigned char *)data, count);
 
     auto file = fopen("", "");
     auto result = fread(buffer, sizeof(char), count, file);
