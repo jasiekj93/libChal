@@ -12,6 +12,7 @@ namespace Chal
 
         virtual bool Open() = 0;
         virtual bool Close() = 0;
+        virtual void Flush() {}
 
         bool Write(const unsigned char *, size_t);
         bool Read(unsigned char *, size_t);
@@ -47,6 +48,7 @@ namespace Chal
         // bool ReadString(unsigned char *out, size_t max);
 
         inline const auto & ReadBuffer() const { return _readBuffer; };
+        inline void Flush() override { _readBuffer.Clear(); }
 
     protected:
         bool _Read(unsigned char *out, size_t) override;

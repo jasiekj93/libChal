@@ -6,33 +6,42 @@
  * @details
  */
 
-#include <stdio.h>
+#include "Stdio.hpp"
 #include "Hal.hpp"
+#include <string.h>
 
-int ferror(FILE *stream)
+int Chal::ferror(FILE *stream)
 {
     if(stream == nullptr)
         return 0;
     
-    auto result = ((Chal::Stream *)stream)->Error();
+    auto result = stream->Error();
 
     return (result ? 1 : 0);
 }
 
-int feof (FILE * stream)
+int Chal::feof(FILE * stream)
 {
     if(stream == nullptr)
         return 0;
     
-    auto result = ((Chal::Stream *)stream)->EndOfFile();
+    auto result = stream->EndOfFile();
 
     return (result ? 1 : 0);
 }
 
-void clearerr (FILE * stream)
+void Chal::clearerr(FILE * stream)
 {
     if(stream == nullptr)
         return;
 
-    ((Chal::Stream *)stream)->ClearErrors();
+    stream->ClearErrors();
+}
+
+void Chal::perror(const char *message)
+{
+    if(Stderr == nullptr)
+        return;
+
+    Stderr->Write((const unsigned char *)message, strlen(message));
 }

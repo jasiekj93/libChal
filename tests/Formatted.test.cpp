@@ -75,3 +75,20 @@ TEST(FormattedTest, Fscanf)
     CHECK_EQUAL(expectedNumber, number);
     MEMCMP_EQUAL(expectedString, buffer, strlen(expectedString));
 }
+
+TEST(FormattedTest, Scanf)
+{
+    int expectedNumber = 5;
+    const char *expectedString = "Dog";
+    char buffer[128];
+    int number;
+    const char text[] = "My Dog is 5 years old."; 
+    const char format[] = "My %s is %d years old.";
+    stream->Append((unsigned char *)text, strlen(text));
+
+    auto result = scanf(format, buffer, &number);
+
+    CHECK_EQUAL(2, result);
+    CHECK_EQUAL(expectedNumber, number);
+    MEMCMP_EQUAL(expectedString, buffer, strlen(expectedString));
+}

@@ -16,7 +16,7 @@ int vfprintf(FILE *pointer, const char *format, va_list args)
 
     auto stream = (Chal::Stream *)pointer;
 
-    auto size = vsnprintf(stream->Buffer(), stream->Size(), format, args);
+    auto size = ::vsnprintf(stream->Buffer(), stream->Size(), format, args);
 
     if(size > stream->Size() || size < 0)
         return -1;
@@ -73,7 +73,7 @@ int vfscanf(FILE *pointer, const char *format, va_list args)
     auto size = stream->ReadUpTo((unsigned char *)buffer, stream->Size() -1);
     buffer[size] = '\0';
 
-    auto result = vsscanf(buffer, format, args);
+    auto result = ::vsscanf(buffer, format, args);
     return result;
 }
 
@@ -113,3 +113,10 @@ int scanf(const char *format, ...)
 
     return result;
 }
+
+int snprintf ( char * s, size_t n, const char * format, ... );
+int sprintf ( char * str, const char * format, ... );
+int sscanf ( const char * s, const char * format, ...);
+int vsnprintf (char * s, size_t n, const char * format, va_list arg );
+int vsprintf (char * s, const char * format, va_list arg );
+int vsscanf ( const char * s, const char * format, va_list arg );
