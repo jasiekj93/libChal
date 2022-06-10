@@ -16,7 +16,7 @@ namespace Mock
     class Stream : public Chal::SerialStream
     {
     public: 
-        Stream(size_t size) : Chal::SerialStream(size)
+        Stream(size_t size) : Chal::SerialStream(size, size)
         {
             WriteBuffer = new unsigned char[size];
         }
@@ -48,7 +48,7 @@ namespace Mock
             if(Result == false)
                 return false;
 
-            if(size > Buffer().Size)
+            if(size > ReadBuffer().Size)
                 return false;
 
             memcpy(WriteBuffer, data, size);

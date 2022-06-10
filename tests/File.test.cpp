@@ -97,3 +97,13 @@ TEST(FileTest, Fwrite)
     CHECK_EQUAL(count, result); 
     MEMCMP_EQUAL(data, stream->WriteBuffer, count);
 }
+
+TEST(FileTest, Setbuf)
+{
+    char buffer[BUFSIZ];
+
+    auto file = fopen("", "");
+    setbuf(file, buffer);
+
+    CHECK_EQUAL(buffer, stream->Buffer()); 
+}

@@ -9,9 +9,6 @@
 #include <stdarg.h>
 #include "Hal.hpp"
 
-static char buffer[1024];
-static size_t bufferSize = 1024;
-
 int vfprintf(FILE *pointer, const char *format, va_list args)
 {
     if(pointer == nullptr)
@@ -19,12 +16,12 @@ int vfprintf(FILE *pointer, const char *format, va_list args)
 
     auto stream = (Chal::Stream *)pointer;
 
-    auto size = vsnprintf(buffer, bufferSize, format, args);
+    auto size = vsnprintf(stream->Buffer(), stream->Size(), format, args);
 
-    if(size > bufferSize || size < 0)
+    if(size > stream->Size() || size < 0)
         return -1;
     
-    auto result = stream->Write((const unsigned char *)buffer, size + 1);
+    auto result = stream->Write((const unsigned char *)stream->Buffer(), size + 1);
 
     return (result ? size : -1);
 }
@@ -72,7 +69,8 @@ int vfscanf(FILE *pointer, const char *format, va_list args)
         return EOF;
 
     auto stream = (Chal::Stream *)pointer;
-    auto size = stream->ReadUpTo((unsigned char *)buffer, bufferSize -1);
+    auto buffer = stream->Buffer();
+    auto size = stream->ReadUpTo((unsigned char *)buffer, stream->Size() -1);
     buffer[size] = '\0';
 
     auto result = vsscanf(buffer, format, args);

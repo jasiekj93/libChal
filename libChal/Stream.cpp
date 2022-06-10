@@ -3,10 +3,21 @@
 
 using namespace Chal;
 
-Stream::Stream()
+Stream::Stream(size_t size)
     : _endOfFile(false)
     , _error(false)
+    , _readAddress(0)
+    , _writeAddress(0)
+    , _size(size)
+    , _buffer(new char[size])
+    , _isBufferToDelete(true)
 {   
+}
+
+Stream::~Stream()
+{
+    if(_isBufferToDelete)
+        delete[] _buffer;
 }
 
 bool Stream::Write(const unsigned char *data, size_t size)
@@ -51,9 +62,34 @@ void Stream::ClearErrors()
     _endOfFile = false;
 }
 
-SerialStream::SerialStream(size_t size)
-    : Stream()
-    , _buffer(size)
+void Stream::SetBuffer(char *pointer, size_t size)
+{
+    if(pointer == nullptr)
+    {
+        if(_isBufferToDelete)
+            delete[] _buffer;
+
+        _buffer == new char[size];
+        _isBufferToDelete = true;
+    }
+    else
+    {
+       if(_isBufferToDelete) 
+       {
+           delete[] _buffer;
+           _isBufferToDelete = false;
+       }
+
+       _buffer = pointer;
+    }
+
+    _size = size;
+}
+
+
+SerialStream::SerialStream(size_t bufferSize, size_t readSize)
+    : Stream(bufferSize)
+    , _readBuffer(readSize)
     , _bufferLock(false)
 {
 }
@@ -68,7 +104,7 @@ bool SerialStream::_Read(unsigned char *out, size_t size)
     
     _bufferLock = true;
 
-    if(size > _buffer.Count())
+    if(size > _readBuffer.Count())
     {
         _endOfFile = true;
         _bufferLock = false;
@@ -76,7 +112,7 @@ bool SerialStream::_Read(unsigned char *out, size_t size)
     }
 
     for(auto i = 0; i < size; i++)
-        out[i] = _buffer.Get();
+        out[i] = _readBuffer.Get();
 
     _bufferLock = false;
     return true;
@@ -94,8 +130,8 @@ size_t SerialStream::_ReadUpTo(unsigned char *out, size_t max)
 
     size_t result = 0;
 
-    while((result < max) && (_buffer.IsEmpty() == false))
-        out[result++] = _buffer.Get();
+    while((result < max) && (_readBuffer.IsEmpty() == false))
+        out[result++] = _readBuffer.Get();
 
     _bufferLock = false;
     return result;
@@ -106,6 +142,6 @@ bool SerialStream::_ReceivedDataCallback(const unsigned char *data, size_t size)
     if(_bufferLock == true)
         return false;
 
-    _buffer.Put(data, size);
+    _readBuffer.Put(data, size);
     return true;
 }

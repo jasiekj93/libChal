@@ -7,7 +7,8 @@ namespace Chal
     class Stream
     {
     public:
-        Stream();
+        Stream(size_t);
+        ~Stream();
 
         virtual bool Open() = 0;
         virtual bool Close() = 0;
@@ -20,6 +21,10 @@ namespace Chal
         inline auto Error() const { return _error; }
         void ClearErrors();
 
+        inline char * Buffer() { return _buffer; }
+        size_t Size() const { return _size; }
+        void SetBuffer(char *, size_t);
+
     protected:
         virtual bool _Write(const unsigned char *, size_t) = 0;
         virtual bool _Read(unsigned char *, size_t) = 0;
@@ -29,16 +34,19 @@ namespace Chal
         size_t _readAddress;
         bool _endOfFile;
         bool _error;
+        char *_buffer;
+        size_t _size;
+        bool _isBufferToDelete;
     };
 
     class SerialStream : public Stream
     {
     public:
-        SerialStream(size_t);
+        SerialStream(size_t, size_t);
 
         // bool ReadString(unsigned char *out, size_t max);
 
-        inline const auto & Buffer() const { return _buffer; };
+        inline const auto & ReadBuffer() const { return _readBuffer; };
 
     protected:
         bool _Read(unsigned char *out, size_t) override;
@@ -47,7 +55,7 @@ namespace Chal
         bool _ReceivedDataCallback(const unsigned char *data, size_t size);
 
     private:
-        CircularBuffer<unsigned char> _buffer;
+        CircularBuffer<unsigned char> _readBuffer;
         bool _bufferLock;
     };
 }

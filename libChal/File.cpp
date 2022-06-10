@@ -55,13 +55,19 @@ FILE * freopen(const char *filename, const char *mode, FILE *stream)
     return fopen(filename, mode);
 }
 
-void setbuf(FILE *stream, char *buffer)
+void setbuf(FILE *pointer, char *buffer)
 {
+    setvbuf(pointer, buffer, 0, BUFSIZ);
 }
 
-int setvbuf(FILE *stream, char *buffer, int mode, size_t size)
+int setvbuf(FILE *pointer, char *buffer, int mode, size_t size)
 {
-    return 1;
+    if(pointer == nullptr)
+        return -1;
+
+    auto stream = (Chal::Stream *)pointer;
+    stream->SetBuffer(buffer, size);
+    return 0;
 }
 
 size_t fread(void *out, size_t size, size_t count, FILE *pointer)
