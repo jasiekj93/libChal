@@ -49,6 +49,9 @@ namespace Chal
     int vsscanf( const char * s, const char * format, va_list arg);
 
     //Character
+    int fputc(int, FILE *);
     int putc(int, FILE *);
     int putchar(int);
+    int fputs(const char *, FILE *);
+    int puts(const char *);
 }
