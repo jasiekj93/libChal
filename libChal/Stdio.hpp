@@ -15,6 +15,7 @@
 namespace Chal
 {
     using FILE = Stream;
+    using fpos_t = size_t;
 
     //Error
     int ferror(FILE *);
@@ -59,4 +60,11 @@ namespace Chal
     int ungetc(int, FILE *);
     char *fgets(char *, int, FILE *);
     char *gets(char *);
+
+    //Positionisng
+    int fgetpos(FILE *, fpos_t *);
+    int fseek(FILE *, long int offset, int origin);
+    int fsetpos(FILE *, const fpos_t *);
+    long int ftell(FILE *);
+    void rewind(FILE *);
 }
