@@ -54,4 +54,9 @@ namespace Chal
     int putchar(int);
     int fputs(const char *, FILE *);
     int puts(const char *);
+    int fgetc(FILE *);
+    int getc();
+    int ungetc(int, FILE *);
+    char *fgets(char *, int, FILE *);
+    char *gets(char *);
 }

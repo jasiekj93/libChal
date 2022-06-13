@@ -51,7 +51,8 @@ namespace Mock
             if(size > ReadBuffer().Size)
                 return false;
 
-            memcpy(WriteBuffer, data, size);
+            memcpy(&WriteBuffer[WriteCount], data, size);
+            WriteCount += size;
             return true;
         }
 
@@ -60,8 +61,19 @@ namespace Mock
             _ReceivedDataCallback(data, size);
         }
 
+        void SetError(bool value)
+        {
+            _error = value;
+        }
+
+        void SetEndOfFile(bool value)
+        {
+            _error = value;
+        }
+
         bool Result = true;
         bool InitalizeStatus = false;
         unsigned char *WriteBuffer;
+        size_t WriteCount = 0;
     };
 }

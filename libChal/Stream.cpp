@@ -57,6 +57,14 @@ size_t Stream::ReadUpTo(unsigned char *data, size_t size)
     return result;
 }
 
+size_t Stream::ReadLine(unsigned char *data, size_t size)
+{
+    auto result = _ReadLine(data, size);
+
+    _readAddress += result;
+    return result;
+}
+
 void Stream::ClearErrors()
 {
     _error = false;
@@ -115,6 +123,9 @@ bool SerialStream::_Read(unsigned char *out, size_t size)
     for(auto i = 0; i < size; i++)
         out[i] = _readBuffer.Get();
 
+    if(_readBuffer.IsEmpty())
+        _endOfFile = true;
+
     _bufferLock = false;
     return true;
 }
@@ -134,6 +145,41 @@ size_t SerialStream::_ReadUpTo(unsigned char *out, size_t max)
     while((result < max) && (_readBuffer.IsEmpty() == false))
         out[result++] = _readBuffer.Get();
 
+    if(_readBuffer.IsEmpty())
+        _endOfFile = true;
+        
+    _bufferLock = false;
+    return result;
+}
+
+size_t SerialStream::_ReadLine(unsigned char *out, size_t max)
+{
+    if(out == nullptr)
+    {
+        _error = true;
+        return 0;
+    }
+    
+    _bufferLock = true;
+
+    size_t result = 0;
+    bool isNewLine = false;
+
+    while((result < max) &&
+        (_readBuffer.IsEmpty() == false) &&
+        (isNewLine == false))
+    {
+        auto character = _readBuffer.Get();
+
+        if(character == '\n')
+            isNewLine = true;
+
+        out[result++] = character;
+    }
+
+    if(_readBuffer.IsEmpty())
+        _endOfFile = true;
+        
     _bufferLock = false;
     return result;
 }

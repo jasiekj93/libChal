@@ -17,6 +17,7 @@ namespace Chal
         bool Write(const unsigned char *, size_t);
         bool Read(unsigned char *, size_t);
         size_t ReadUpTo(unsigned char *, size_t max);
+        size_t ReadLine(unsigned char *, size_t max);
 
         inline auto EndOfFile() const { return _endOfFile; }
         inline auto Error() const { return _error; }
@@ -30,6 +31,7 @@ namespace Chal
         virtual bool _Write(const unsigned char *, size_t) = 0;
         virtual bool _Read(unsigned char *, size_t) = 0;
         virtual size_t _ReadUpTo(unsigned char *, size_t max) = 0;
+        virtual size_t _ReadLine(unsigned char *, size_t max) = 0;
 
         size_t _writeAddress;
         size_t _readAddress;
@@ -53,6 +55,8 @@ namespace Chal
     protected:
         bool _Read(unsigned char *out, size_t) override;
         size_t _ReadUpTo(unsigned char *out, size_t max) override;
+        size_t _ReadLine(unsigned char *out, size_t max) override;
+
 
         bool _ReceivedDataCallback(const unsigned char *data, size_t size);
 
