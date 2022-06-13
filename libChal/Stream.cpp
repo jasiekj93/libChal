@@ -7,8 +7,7 @@ using namespace Chal;
 Stream::Stream(size_t size)
     : _endOfFile(false)
     , _error(false)
-    , _readAddress(0)
-    , _writeAddress(0)
+    , Offset(0)
     , _size(size)
     , _buffer(new char[size])
     , _isBufferToDelete(true)
@@ -26,7 +25,7 @@ bool Stream::Write(const unsigned char *data, size_t size)
     auto result = _Write(data, size);
 
     if(result == true)
-        _writeAddress += size;
+        Offset += size;
     else
         _endOfFile = true;
 
@@ -38,7 +37,7 @@ bool Stream::Read(unsigned char *data, size_t size)
     auto result = _Read(data, size);
 
     if(result == true)
-        _readAddress += size;
+        Offset += size;
     else
         _endOfFile = true;
     
@@ -49,7 +48,7 @@ size_t Stream::ReadUpTo(unsigned char *data, size_t size)
 {
     auto result = _ReadUpTo(data, size);
 
-    _readAddress += result;
+    Offset += result;
 
     if(result < size)
         _endOfFile = true;
@@ -61,7 +60,7 @@ size_t Stream::ReadLine(unsigned char *data, size_t size)
 {
     auto result = _ReadLine(data, size);
 
-    _readAddress += result;
+    Offset += result;
     return result;
 }
 

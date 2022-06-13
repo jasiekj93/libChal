@@ -24,8 +24,10 @@ namespace Chal
         void ClearErrors();
 
         inline char * Buffer() { return _buffer; }
-        size_t Size() const { return _size; }
+        inline size_t Size() const { return _size; }
         void SetBuffer(char *, size_t);
+
+        size_t Offset;
 
     protected:
         virtual bool _Write(const unsigned char *, size_t) = 0;
@@ -33,8 +35,6 @@ namespace Chal
         virtual size_t _ReadUpTo(unsigned char *, size_t max) = 0;
         virtual size_t _ReadLine(unsigned char *, size_t max) = 0;
 
-        size_t _writeAddress;
-        size_t _readAddress;
         bool _endOfFile;
         bool _error;
         char *_buffer;
